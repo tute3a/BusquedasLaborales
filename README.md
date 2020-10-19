@@ -1,4 +1,4 @@
-## BusquedasLaborales
+# BusquedasLaborales
 El archivo BusquedasLaborales.py hace el scraping de ZonaJobs y Bumeran.
 
 El archivo Genero.py clasifica el género, llamando funciones que están en el archivo Genero_funciones.py
@@ -7,7 +7,7 @@ El archivo Genero.py clasifica el género, llamando funciones que están en el a
 
 
 
-# Lista de ibrerías necesarias
+## Lista de ibrerías necesarias
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
