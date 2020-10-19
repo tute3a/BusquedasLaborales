@@ -1,4 +1,4 @@
-# BusquedasLaborales
+# ¿Qué hace cada archivo?
 El archivo BusquedasLaborales.py hace el scraping de ZonaJobs y Bumeran.
 
 El archivo Genero.py clasifica el género, llamando funciones que están en el archivo Genero_funciones.py
