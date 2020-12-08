@@ -7,7 +7,7 @@ El archivo Genero.py clasifica el género, llamando funciones que están en el a
 
 
 
-## Lista de ibrerías necesarias
+## Lista de librerías necesarias
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
