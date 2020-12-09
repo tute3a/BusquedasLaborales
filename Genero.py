@@ -9,12 +9,15 @@ df = pd.read_excel (r'C:\Users\Administrator\Desktop\ZonaJobs testeo.xlsx', shee
 titulos = df.Trabajo
 
 final = []
+i = 1
 
 for titulo in titulos:
     titulo = tranf_titulo(titulo)
     genero = busqueda_palabras(titulo,df_prof)
     genero = define_genero(genero)
     final.append((titulo, genero))
+    print("Títulos revisados: " + str(i) + ", representa el: " + str(round(i/len(titulos),3)*100) + "%")
+    i = i + 1ero))
 
 
 df = pd.DataFrame(final,columns=['Titulo','Genero'])
