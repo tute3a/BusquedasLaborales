@@ -2,14 +2,40 @@ import pandas as pd
 import re
 import spacy
 from googletrans import Translator #Para detectar el idioma
+from spacy_langdetect import LanguageDetector #Para detectar el idioma (segunda función)
 
 
 nlp = spacy.load('es')
+nlp.add_pipe(LanguageDetector(), name='language_detector', last=True)
 translator = Translator()
+
+def detecta_idioma2(texto):
+    """
+    DEVUELVE EL IDIOMA DEL TÍTULO ('es' para español, 'en' para inglés, etc.).
+    Usa Spacy
+    """
+
+        # Para evitar que reconozca mal palabras de pocos caracteres
+    if len(texto) >= 5:
+        idioma = nlp(texto)
+
+            # Si tiene más del 90% de confianza en el idioma identificado se lo asigna
+        if idioma._.language['score'] >= 0.9:
+            idioma = idioma._.language['language']
+
+            # Si tiene menos le asigna español para que busque palabras
+        else:
+            idioma = 'es'
+    else:
+        idioma = 'es'
+
+    return idioma
+
 
 def detecta_idioma(texto):
     """
     DEVUELVE EL IDIOMA DEL TÍTULO ('es' para español, 'en' para inglés, etc.).
+    Usa Google traductor
     """
 
         # Para evitar que reconozca mal palabras de pocos caracteres
@@ -27,7 +53,6 @@ def detecta_idioma(texto):
         idioma = 'es'
 
     return idioma
-
 
 
 
@@ -284,12 +309,12 @@ def tranf_titulo(titulo_original):
     nuevo_titulo = re.sub(r"^agente inmobiliario ", " masculino ", nuevo_titulo)
     nuevo_titulo = re.sub(r"^agente inmobiliario$", " masculino ", nuevo_titulo)
 
-    
+    # AGOBADO/ABOGADA Abogado/a estudiantes/graduados  sistemas/informatica/programacion
+    # si la palabra que le sigue es len>2 cambio / por " "
+
+
+
     return nuevo_titulo
-
-
-
-
 
 def define_genero (matriz):
     """
@@ -349,14 +374,9 @@ def define_genero (matriz):
 
     return genero_nueva
 
-
-
-
-
 def busqueda_spacy(texto):
     """"
-    BUSCA EN LOS TÍTULOS LOS ADJETIVOS RELACIONADOS AL SUSTANTIVO PRINCIPAL Y LES ASIGNA EL GÉNERO.
-    SIRVE PARA ENCONTRAR LAS QUE TENEMOS QUE CLASIFICAR A MANO.
+    BUSCA EN LOS TÍTULOS LOS ADJETIVOS RELACIONADOS AL SUSTANTIVO PRINCIPAL Y LES ASIGNA EL GÉNERO
     """
 
     doc = nlp(texto)
@@ -390,10 +410,6 @@ def busqueda_spacy(texto):
 
     return detalles
 
-
-
-
-
 def busqueda_palabras(title, database):
     """"
     BUSCA LOS TITULOS EN LA LISTA Y LE ASIGNA UN GENERO A CADA PALABRA
@@ -403,7 +419,7 @@ def busqueda_palabras(title, database):
     gender = []
 
     # Mira el idioma del título
-    idioma = detecta_idioma(title)
+    idioma = detecta_idioma2(title)
 
         # Si es inglés le asigna genérico
     if idioma == 'en':
